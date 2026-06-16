@@ -16,6 +16,9 @@ class ApiClient
     private string $baseUrl;
     private string $key;
 
+    private int $requestCount = 0;
+    private int $logEvery = 1;
+
     public function __construct()
     {
         $this->baseUrl = config('services.external_api.base_url');
@@ -44,10 +47,18 @@ class ApiClient
 
     private function get(string $endpoint, array $query): array
     {
+        $this->requestCount++;
+
         $query = array_merge([
             'key' => $this->key,
             'limit' => self::LIMIT,
         ], $query);
+
+        $url = rtrim($this->baseUrl, '/') . $endpoint . '?' . http_build_query($query);
+
+        if ($this->requestCount % $this->logEvery === 0) {
+            dump("API REQUEST #{$this->requestCount}: $url");
+        }
 
         return Http::baseUrl($this->baseUrl)
             ->acceptJson()
