@@ -4,3 +4,10 @@ host: 89.124.118.172
 port: 3306  
 user: api_fetcher_readonly_user  
 password: g4eHlPW8jzDL27r  
+
+### Таблицы, каждая отвечает за свой эндпоинт:
+
+orders  
+incomes  
+sales  
+stocks  
