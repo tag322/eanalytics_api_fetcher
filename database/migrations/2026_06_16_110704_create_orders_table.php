@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
 
-            $table->string('g_number')->unique();
+            $table->string('g_number')->nullable();
 
             $table->dateTime('date')->nullable();
             $table->date('last_change_date')->nullable();
