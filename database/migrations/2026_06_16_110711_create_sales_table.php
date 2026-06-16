@@ -47,7 +47,7 @@ return new class extends Migration
             $table->decimal('finished_price', 12, 2)->nullable();
             $table->decimal('price_with_disc', 12, 2)->nullable();
 
-            $table->unsignedBigInteger('nm_id')->nullable();
+            $table->BigInteger('nm_id')->nullable();
 
             $table->string('subject')->nullable();
             $table->string('category')->nullable();

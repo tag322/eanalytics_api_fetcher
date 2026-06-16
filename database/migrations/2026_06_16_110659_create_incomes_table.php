@@ -33,7 +33,7 @@ return new class extends Migration
 
             $table->string('warehouse_name')->nullable();
 
-            $table->unsignedBigInteger('nm_id')->nullable();
+            $table->BigInteger('nm_id')->nullable();
 
             // $table->timestamps();
 

@@ -36,7 +36,7 @@ return new class extends Migration
             //     ->onDelete('cascade');
             $table->string('odid')->nullable();
 
-            $table->unsignedBigInteger('nm_id')->nullable();
+            $table->BigInteger('nm_id')->nullable();
 
             $table->string('subject')->nullable();
             $table->string('category')->nullable();
