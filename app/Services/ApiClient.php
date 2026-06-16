@@ -57,7 +57,12 @@ class ApiClient
         $url = rtrim($this->baseUrl, '/') . $endpoint . '?' . http_build_query($query);
 
         if ($this->requestCount % $this->logEvery === 0) {
-            dump("API REQUEST #{$this->requestCount}: $url");
+            dump([
+                'request' => $this->requestCount,
+                'url' => $url,
+                'memory_mb' => round(memory_get_usage(true) / 1024 / 1024, 2),
+                'peak_mb' => round(memory_get_peak_usage(true) / 1024 / 1024, 2),
+            ]);
         }
 
         return Http::baseUrl($this->baseUrl)
