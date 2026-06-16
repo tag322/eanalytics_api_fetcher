@@ -12,7 +12,10 @@ class SyncDataCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'app:sync-data-command';
+    protected $signature = '
+        app:sync-data
+        {--entity=all : all|incomes|orders|sales|stocks}
+    ';
 
     /**
      * The console command description.
@@ -26,6 +29,6 @@ class SyncDataCommand extends Command
      */
     public function handle(SyncService $syncService)
     {
-        $syncService->sync();
+        $syncService->sync($this->option('entity'));
     }
 }

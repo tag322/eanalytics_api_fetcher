@@ -17,39 +17,47 @@ class SyncService {
         private ApiClient $api,
     ) {}
 
-    public function sync(): void
+    public function sync(string $entity = 'all'): void
     {
         $query = [
             'dateFrom' => config('services.external_api.test_mode') ?? false ? Carbon::now()->format('Y-m-d') : '2020-01-01',
             'dateTo' => Carbon::now()->format('Y-m-d'),
         ];
 
-        $this->syncEntity(
-            fn ($page) => $this->api->getIncomes(array_merge($query, ['page' => $page])),
-            Income::class,
-            ['income_id'],
-        );
+        if ($entity === 'all' || $entity === 'incomes') {
+                $this->syncEntity(
+                    fn ($page) => $this->api->getIncomes(array_merge($query, ['page' => $page])),
+                    Income::class,
+                    ['income_id'],
+                );
+            }
 
-        $this->syncEntity(
-            fn ($page) => $this->api->getOrders(array_merge($query, ['page' => $page])),
-            Order::class,
-            ['g_number'],
-        );
-        
-        $this->syncEntity(
-            fn ($page) => $this->api->getSales(array_merge($query, ['page' => $page])),
-            Sale::class,
-            ['g_number'],
-        );
+        if ($entity === 'all' || $entity === 'orders') {
+            $this->syncEntity(
+                fn ($page) => $this->api->getOrders(array_merge($query, ['page' => $page])),
+                Order::class,
+                ['g_number'],
+            );
+        }
 
-        // эндпоинт отдает инфу только за сегодня
-        $query['dateFrom'] = $query['dateTo'];
+        if ($entity === 'all' || $entity === 'sales') {
+            $this->syncEntity(
+                fn ($page) => $this->api->getSales(array_merge($query, ['page' => $page])),
+                Sale::class,
+                ['g_number'],
+            );
+        }
 
-        $this->syncEntity(
-            fn ($page) => $this->api->getStocks(array_merge($query, ['page' => $page])),
-            Stock::class,
-            ['g_number'],
-        );
+        if ($entity === 'all' || $entity === 'stocks') {
+            $stocksQuery = $query;
+            $stocksQuery['dateFrom'] = $stocksQuery['dateTo'];
+
+            $this->syncEntity(
+                fn ($page) => $this->api->getStocks(array_merge($stocksQuery, ['page' => $page])),
+                Stock::class,
+                ['g_number'],
+            );
+        }
     }
 
     private function syncEntity(
